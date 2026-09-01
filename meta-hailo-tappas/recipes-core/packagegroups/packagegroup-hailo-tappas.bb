@@ -12,7 +12,7 @@ PACKAGES = "\
 
 RDEPENDS:${PN} = "\
     hailo-post-processes \
-    libgsthailo \
+    libgsthailo10 \
     libgsthailotools"
 
 RDEPENDS:${PN}-dev-pkg = "\

@@ -17,7 +17,7 @@ etcdir = "${D}/etc"
 inherit hailort-base
 inherit ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)}
 
-RDEPENDS:${PN} += "libhailort bash"
+RDEPENDS:${PN} += "libhailort10 bash"
 
 SYSTEMD_SERVICE:${PN} = "hailort_server.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"

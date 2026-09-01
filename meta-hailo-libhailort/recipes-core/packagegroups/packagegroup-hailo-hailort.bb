@@ -11,8 +11,8 @@ PACKAGEGROUP_DISABLE_COMPLEMENTARY = "1"
 
 RDEPENDS:${PN}-base = "\
     hailort-server \
-    hailortcli \
-    libhailort \
+    hailort10cli \
+    libhailort10 \
     "
 RDEPENDS:${PN}-base-dev-pkg = "\
     ${PN}-base \
