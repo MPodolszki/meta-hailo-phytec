@@ -1,8 +1,12 @@
-DESCRIPTION = "gsthailo GStreamer plugin \
-               compiles the hailo gstreamer plugin including hailonet \
-               the output of the compilation (libgsthailo.so) is copied to the target's rootfs under usr/lib/gstreamer-1.0 (gstreamer's plugins directory)"
+DESCRIPTION = "gsthailo GStreamer plugin for Hailo-10H/15/Mars \
+               compiles the hailo gstreamer plugin including hailonet against the master-branch \
+               HailoRT. Recipe/package name is libgsthailo10 purely so bitbake can carry this \
+               alongside the Hailo-8 build (libgsthailo_4.23.0.bb, PN libgsthailo) as two \
+               separate recipes; phytec-hailo-image.bb's HAILO_CHIP flag ever only pulls in ONE \
+               of the two into a given image, so the installed plugin is plain \
+               gstreamer-1.0/libgsthailo.so either way."
 
-LICENSE = "LGPLv2.1"
+LICENSE = "LGPL-2.1-only"
 LIC_FILES_CHKSUM = "file://hailort/LICENSE;md5=800c77403398cedcbbbcd86d37f5e0ff \
                     file://hailort/LICENSE-3RD-PARTY.md;md5=eb78bffb175a3f2be317bb4c45fedecf \
                     file://hailort/libhailort/bindings/gstreamer/LICENSE;md5=4b54a1fd55a448865a0b32d41598759d"
@@ -15,9 +19,8 @@ S = "${WORKDIR}/git"
 inherit pkgconfig
 inherit hailort-base
 
-# recipe is dependent on libhailort shared object file
 DEPENDS = "glib-2.0 gstreamer1.0 gstreamer1.0-plugins-base glib-2.0-native"
-RDEPENDS:${PN} += "libhailort"
+RDEPENDS:${PN} += "libhailort10"
 
 EXTRA_OECMAKE:append = " -DHAILO_BUILD_GSTREAMER=1"
 OECMAKE_TARGET_COMPILE = "gsthailo"
@@ -27,15 +30,13 @@ GST_HAILO_INCLUDE_STAGING_DIR = "${D}${includedir}/gst-hailo"
 GST_HAILO_INCLUDE_STAGING_INCLUDE_DIR = "${GST_HAILO_INCLUDE_STAGING_DIR}/metadata"
 
 do_install() {
-    # copy libgsthailo shared object to usr/lib/gstreamer-1.0 in the rootfs - so gstreamer could load it
     install -d ${D}${libdir}/gstreamer-1.0
-    install -m 0755 ${LIB_SRC_DIR}libgsthailo.so  ${D}${libdir}/gstreamer-1.0
+    install -m 0755 ${LIB_SRC_DIR}libgsthailo.so ${D}${libdir}/gstreamer-1.0/libgsthailo.so
 
     install -d ${GST_HAILO_INCLUDE_STAGING_DIR}
     install -d ${GST_HAILO_INCLUDE_STAGING_INCLUDE_DIR}
     cd ${GST_HAILO_SOURCES_DIR}
     find . -type f -name \*.hpp -exec install -D {} ${GST_HAILO_INCLUDE_STAGING_DIR}/{} \;
-    # copy hailo_gst.h file with its dir to the directory of tensor_meta.hpp
     find . -type f -name \*.h -exec install -D {} ${GST_HAILO_INCLUDE_STAGING_INCLUDE_DIR}/{} \;
 }
 

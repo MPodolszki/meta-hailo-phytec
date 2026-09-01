@@ -1,0 +1,26 @@
+Don't regenerate the ANTLR grammar at build time
+
+BuildPyCommand unconditionally re-runs ANTLR via `java -jar ...` before
+every build, even though the sdist already ships omegaconf/grammar/gen/
+pre-generated for runtime 4.9.3 (the exact version this recipe depends
+on, see python3-antlr4-runtime_4.9.3.bb). This Yocto build has no Java
+toolchain, so do_compile fails with "No such file or directory: 'java'".
+
+Since the shipped generated files already match the pinned runtime,
+regenerating them is redundant here -- just build from what's shipped.
+
+Upstream-Status: Inappropriate [OE-specific: avoids a build-time Java dependency]
+
+--- a/build_helpers/build_helpers.py
++++ b/build_helpers/build_helpers.py
+@@ -55,9 +55,9 @@
+
+ class BuildPyCommand(build_py.build_py):  # pragma: no cover
+     def run(self) -> None:
+-        if not self.dry_run:
+-            self.run_command("clean")
+-            run_antlr(self)
++        # Yocto: skip clean+run_antlr(java) here -- the sdist already ships
++        # the ANTLR grammar pre-generated for runtime 4.9.3, and this build
++        # has no Java toolchain to regenerate it.
+         build_py.build_py.run(self)
