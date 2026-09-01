@@ -34,6 +34,10 @@ def hailo_chip_packages(d):
         # compiled specifically for Hailo-8. Pulls in ~5 MB of models via
         # demo-object-detection-data.
         packages += " demo-object-detection"
+        # Unattended kiosk rotation through the three demos above plus a
+        # static "other demos" info screen; takes over from
+        # demo-celebrity-face-match's own always-on service (disables it).
+        packages += " demo-loop"
     elif chip == "hailo10":
         # HailoRT master branch/5.3.0 - Hailo-10H/15/Mars.
         packages = "hailo-firmware hailo-pci libhailort10 hailort10cli libgsthailo10 hailo-python-wheels"
