@@ -1,0 +1,12 @@
+[Unit]
+Description=Pre-compile and cache the facematch NPU graph in isolation
+Before=demo-celebrity-face-match.service
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/npu-cache-warmup
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

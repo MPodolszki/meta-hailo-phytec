@@ -1,4 +1,4 @@
-require recipes-images/images/phytec-facematch-image.bb
+require recipes-images/images/phytec-vision-image.bb
 
 SUMMARY =  "PHYTEC's AiKit Hailo Demo image"
 LICENSE = "MIT"
@@ -50,6 +50,8 @@ IMAGE_INSTALL += "\
     python3-pip \
     git \
     python3-netifaces \
+    demo-celebrity-face-match \
+    canon-selphy \
 "
 
 #adding Hailo Packages to the Phytecs AI Image
