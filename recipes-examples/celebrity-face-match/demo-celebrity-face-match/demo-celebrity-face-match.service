@@ -1,0 +1,23 @@
+[Unit]
+Description=Celebrity Face Match Demo Service
+Requires=systemd-udev-settle.service weston.service
+After=systemd-udev-settle.service weston.service
+
+[Service]
+Type=exec
+User=weston
+Group=weston
+Environment="XDG_RUNTIME_DIR=/run/user/1000" "WAYLAND_DISPLAY=wayland-1"
+# -s controls which of demo-celebrity-face-match's own layout presets it
+# uses, not which output it draws to -- picking the wrong one for the
+# actually-connected panel makes the GTK window request a fullscreen
+# surface bigger than the display, and Weston kills the connection
+# ("xdg_surface geometry ... is larger than the configured fullscreen
+# state"). /run/demo-display-kind is written at boot by demo-loop's
+# detect-display (see meta-hailo-examples-phytec), which is present
+# whether or not demo-loop.service itself ends up running this demo;
+# fall back to lvds if that package isn't installed at all.
+ExecStart=/bin/bash -lc "demo-celebrity-face-match -c vm016 -s $(cat /run/demo-display-kind 2>/dev/null || echo lvds) -f"
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""Pre-compiles and caches the facematch NPU graph in isolation, before
+demo-celebrity-face-match starts.
+
+Compiling this models graph for the NPU (Vivante VX delegate) takes ~40s
+the first time and is reliably safe when nothing else is competing for
+CPU/scheduling -- but crashes with a NULL-pointer segfault deep in the
+closed-source compiler every time it has been observed to run concurrently
+with the demos own GTK/Wayland/camera startup instead (confirmed via
+repeated isolated-vs-in-app reproduction). Running it here, alone, once at
+boot, means the demo itself only ever needs to load an already-compiled
+graph (~1.5s), never compile one under that contention.
+"""
+import os
+import sys
+sys.path.insert(0, "/usr/lib/python3.12/site-packages")
+
+os.chdir("/")
+import tflite_runtime.interpreter as tflite
+
+MODEL = "/usr/share/demo-celebrity-face-match/demo-data/models/tflite/quantized_modelh5-15.tflite"
+
+os.environ["VIV_VX_CACHE_BINARY_GRAPH_DIR"] = os.getcwd()
+os.environ["VIV_VX_ENABLE_CACHE_GRAPH_BINARY"] = "1"
+
+if not os.path.exists(MODEL):
+    print(f"npu-cache-warmup: {MODEL} not found, skipping", file=sys.stderr)
+    sys.exit(0)
+
+ext_delegate = [tflite.load_delegate("/usr/lib/libvx_delegate.so")]
+interp = tflite.Interpreter(MODEL, experimental_delegates=ext_delegate)
+interp.allocate_tensors()
+inp = interp.get_input_details()[0]
+
+import numpy as np
+data = np.zeros(inp["shape"], dtype=inp["dtype"])
+interp.set_tensor(inp["index"], data)
+interp.invoke()
+print("npu-cache-warmup: NPU graph compiled and cached successfully")
