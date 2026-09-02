@@ -1,0 +1,1 @@
+overlays=conf-imx8mp-phyboard-pollux-isi-csi1.dtbo#conf-imx8mp-phyboard-pollux-vm016-csi1.dtbo
