@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://src/${GO_IMPORT}/LICENSE;md5=35b61b5975388824d233d3f4
 GO_IMPORT = "import"
 
 SRC_URI = " \
-    git://github.com/OpenPrinting/ipp-usb.git;protocol=https;branch=master \
+    git://github.com/OpenPrinting/ipp-usb.git;protocol=https;branch=master;destsuffix=${GO_SRCURI_DESTSUFFIX} \
     file://0001-systemd-udev-Fix-path-to-ipp-usb.patch \
 "
 SRCREV = "4b39c447f5ab9be4a6626cd56539d6742a48db01"
@@ -24,6 +24,14 @@ do_compile() {
     export GOARCH="${TARGET_GOARCH}"
     export GOPATH="${S}/src/import:${S}/src/import/vendor"
     export GOROOT="${STAGING_DIR_NATIVE}/${nonarch_libdir}/${HOST_SYS}/go"
+
+    # The upstream Makefile calls "go build" directly, so go.bbclass's
+    # GOBUILDFLAGS (which carry -trimpath) never reach it and the Go stdlib
+    # source paths under recipe-sysroot-native/usr/lib/go end up embedded in
+    # the binary. Since Yocto 5.0 the buildpaths QA check is a fatal error,
+    # not a warning, so pass -trimpath through GOFLAGS instead -- go applies
+    # it on top of the Makefile's own flags.
+    export GOFLAGS="-trimpath"
 
     export CGO_ENABLED="1"
     export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
