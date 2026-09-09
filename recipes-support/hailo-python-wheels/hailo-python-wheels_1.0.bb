@@ -13,7 +13,7 @@ SRC_URI = " \
     file://hailort-5.3.0-cp312-cp312-linux_aarch64.whl \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit python3-dir python3native
 
@@ -35,7 +35,7 @@ RCONFLICTS:${PN} += "pyhailort hailo8-python-wheels"
 INSANE_SKIP:${PN} += "already-stripped"
 
 do_install() {
-    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${WORKDIR}/hailort-5.3.0-cp312-cp312-linux_aarch64.whl
+    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${UNPACKDIR}/hailort-5.3.0-cp312-cp312-linux_aarch64.whl
 
     # Convert native build-time shebangs to target runtime Python.
     if [ -f ${D}${bindir}/hailo ]; then

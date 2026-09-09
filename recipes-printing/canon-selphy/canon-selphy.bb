@@ -8,7 +8,7 @@ SRC_URI = " \
     file://canon-selphy-cp1500.service \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit systemd
 

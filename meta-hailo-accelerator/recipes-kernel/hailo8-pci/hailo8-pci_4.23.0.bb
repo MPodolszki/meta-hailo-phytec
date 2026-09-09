@@ -13,7 +13,7 @@ SRCREV = "ce1087bfe8132c99b41374e3128fc78612a3f492"
 
 inherit module
 
-S = "${WORKDIR}/git/linux/pcie"
+S = "${UNPACKDIR}/git/linux/pcie"
 
 EXTRA_OEMAKE += "KERNEL_DIR=${STAGING_KERNEL_DIR}"
 MAKE_TARGETS = "all"

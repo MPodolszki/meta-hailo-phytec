@@ -15,7 +15,7 @@ SRC_URI = " \
 BRANCH = "main"
 SRCREV = "edb093031fa315f61cf66ebc092bed17b61797c8"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 DEPENDS += "gtk+3"
 
@@ -24,7 +24,7 @@ inherit meson pkgconfig systemd
 SYSTEMD_SERVICE:${PN} = "demo-celebrity-face-match.service"
 
 do_install:append() {
-    install -Dm 0644 ${WORKDIR}/${BPN}.service ${D}${systemd_system_unitdir}/${BPN}.service
+    install -Dm 0644 ${UNPACKDIR}/${BPN}.service ${D}${systemd_system_unitdir}/${BPN}.service
 }
 
 RDEPENDS:${PN} += " \

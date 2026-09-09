@@ -11,7 +11,7 @@ SRCREV = "5c346eddad1acc2d6b6a7cf661760279f63d274e"
 
 SRC_URI[tokenizers_cpp.sha256sum] = "5fa87d0425174667127488dc128b27e11ada4edb1d205b1ffa8bed44b9c9fed0"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 etcdir = "${D}/etc"
 
 inherit hailort-base
@@ -23,8 +23,8 @@ SYSTEMD_SERVICE:${PN} = "hailort_server.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 EXTRA_OECMAKE:append = " -DHAILO_BUILD_HAILORT_SERVER=1 -DHAILO_BUILD_GENAI_SERVER=1"
-EXTRA_OECMAKE:append = " -DTOKENIZERS_LIB_PATH=${WORKDIR}/genai_servers/libtokenizers_cpp.a"
-EXTRA_OECMAKE:append = " -DTOKENIZERS_RUST_LIB_PATH=${WORKDIR}/genai_servers/libtokenizers_c.a -DTOKENIZERS_INCLUDE_DIR=${WORKDIR}/genai_servers/include"
+EXTRA_OECMAKE:append = " -DTOKENIZERS_LIB_PATH=${UNPACKDIR}/genai_servers/libtokenizers_cpp.a"
+EXTRA_OECMAKE:append = " -DTOKENIZERS_RUST_LIB_PATH=${UNPACKDIR}/genai_servers/libtokenizers_c.a -DTOKENIZERS_INCLUDE_DIR=${UNPACKDIR}/genai_servers/include"
 OECMAKE_TARGET_COMPILE = "hailort_server"
 
 do_install:append() {

@@ -18,9 +18,9 @@ SRC_URI = "${BASE_URI}/${FW_AWS_DIR}/${FW};unpack=0;md5sum=a9a80585a6733674e2ca1
 		${BASE_URI}/${FW_AWS_DIR}/${LICENSE_FILE};md5sum=263ee034adc02556d59ab1ebdaea2cda"
 
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://${WORKDIR}/${LICENSE_FILE};md5=263ee034adc02556d59ab1ebdaea2cda"
+LIC_FILES_CHKSUM = "file://${UNPACKDIR}/${LICENSE_FILE};md5=263ee034adc02556d59ab1ebdaea2cda"
 
-FW_PATH = "${WORKDIR}/${FW}"
+FW_PATH = "${UNPACKDIR}/${FW}"
 
 do_install() {
 	install -d ${D}${nonarch_base_libdir}/firmware/hailo

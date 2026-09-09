@@ -13,7 +13,7 @@ SRC_URI = " \
 SRCREV = "4b39c447f5ab9be4a6626cd56539d6742a48db01"
 UPSTREAM_CHECK_COMMITS = "1"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 DEPENDS += "libusb avahi glibc"
 

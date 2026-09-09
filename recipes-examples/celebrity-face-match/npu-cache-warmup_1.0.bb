@@ -17,7 +17,7 @@ SRC_URI = " \
     file://npu-warmup.conf \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit systemd
 
@@ -25,9 +25,9 @@ SYSTEMD_SERVICE:${PN} = "npu-cache-warmup.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install() {
-    install -Dm 0755 ${WORKDIR}/npu-cache-warmup ${D}${bindir}/npu-cache-warmup
-    install -Dm 0644 ${WORKDIR}/npu-cache-warmup.service ${D}${systemd_system_unitdir}/npu-cache-warmup.service
-    install -Dm 0644 ${WORKDIR}/npu-warmup.conf \
+    install -Dm 0755 ${UNPACKDIR}/npu-cache-warmup ${D}${bindir}/npu-cache-warmup
+    install -Dm 0644 ${UNPACKDIR}/npu-cache-warmup.service ${D}${systemd_system_unitdir}/npu-cache-warmup.service
+    install -Dm 0644 ${UNPACKDIR}/npu-warmup.conf \
         ${D}${systemd_system_unitdir}/demo-celebrity-face-match.service.d/npu-warmup.conf
 }
 

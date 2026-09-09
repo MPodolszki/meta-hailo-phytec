@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://../../../../LICENSE;md5=800c77403398cedcbbbcd86d37f5e
 SRC_URI = "git://git@github.com/hailo-ai/hailort.git;protocol=https;branch=master"
 SRCREV = "d503417f2a0db186a838390fb08690c4ea0f415e"
 
-S = "${WORKDIR}/git/hailort/libhailort/bindings/python/platform"
+S = "${UNPACKDIR}/git/hailort/libhailort/bindings/python/platform"
 
 inherit pkgconfig hailort-base python3native setuptools3
 
@@ -27,7 +27,7 @@ do_compile:prepend() {
     # allow linkage against pybind11
     export PYTHON_INCLUDE_DIRS=${STAGING_INCDIR}/python${PYTHON_BASEVERSION}
     # define the toolchain file
-    export CMAKE_TOOLCHAIN_FILE=${WORKDIR}/toolchain.cmake
+    export CMAKE_TOOLCHAIN_FILE=${UNPACKDIR}/toolchain.cmake
 }
 
 # prevents the following error:

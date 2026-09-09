@@ -13,7 +13,7 @@ LIC_FILES_CHKSUM = "file://hailort/LICENSE;md5=800c77403398cedcbbbcd86d37f5e0ff 
 SRC_URI = "git://git@github.com/hailo-ai/hailort.git;protocol=https;branch=master"
 SRCREV = "d503417f2a0db186a838390fb08690c4ea0f415e"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 inherit hailort-base
 

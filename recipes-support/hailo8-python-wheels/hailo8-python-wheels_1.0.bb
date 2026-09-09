@@ -13,7 +13,7 @@ SRC_URI = " \
     file://hailort-4.23.0-cp312-cp312-linux_aarch64.whl \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit python3-dir python3native
 
@@ -35,7 +35,7 @@ RCONFLICTS:${PN} += "pyhailort hailo-python-wheels"
 INSANE_SKIP:${PN} += "already-stripped"
 
 do_install() {
-    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${WORKDIR}/hailort-4.23.0-cp312-cp312-linux_aarch64.whl
+    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${UNPACKDIR}/hailort-4.23.0-cp312-cp312-linux_aarch64.whl
 
     if [ -f ${D}${bindir}/hailo ]; then
         sed -i '1s|^#!.*|#!/usr/bin/env python3|' ${D}${bindir}/hailo

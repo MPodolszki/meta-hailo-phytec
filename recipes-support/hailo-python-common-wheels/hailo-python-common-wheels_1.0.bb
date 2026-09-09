@@ -11,7 +11,7 @@ SRC_URI = " \
     file://hailo_tappas_core_python_binding-5.3.0-py3-none-any.whl \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit python3-dir python3native
 
@@ -38,8 +38,8 @@ RDEPENDS:${PN} += " \
 INSANE_SKIP:${PN} += "already-stripped"
 
 do_install() {
-    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${WORKDIR}/hailo_model_zoo-2.18.0-py3-none-any.whl
-    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${WORKDIR}/hailo_tappas_core_python_binding-5.3.0-py3-none-any.whl
+    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${UNPACKDIR}/hailo_model_zoo-2.18.0-py3-none-any.whl
+    nativepython3 -m installer --destdir=${D} --prefix=${prefix} ${UNPACKDIR}/hailo_tappas_core_python_binding-5.3.0-py3-none-any.whl
 
     # Keep only target-compatible artifacts for this image.
     find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*x86_64-linux-gnu.so" -delete

@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = "file://hailort/LICENSE;md5=800c77403398cedcbbbcd86d37f5e0ff 
 SRC_URI = "git://git@github.com/hailo-ai/hailort.git;protocol=https;branch=master"
 SRCREV = "d503417f2a0db186a838390fb08690c4ea0f415e"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 inherit hailort-base
 OECMAKE_TARGET_COMPILE = "libhailort"
@@ -32,8 +32,8 @@ do_install:append() {
   cp -r ${S}/hailort/libhailort/include/* ${HAILORT_INCLUDE_STAGING_DIR}/
 
   install -d ${HAILORT_EXPORT_DIR}
-  install -m 0644 ${WORKDIR}/build/hailort/libhailort/src/*.cmake ${HAILORT_EXPORT_DIR}
-  install -m 0644 ${WORKDIR}/build/hailort/libhailort/src/CMakeFiles/Export/**/*.cmake ${HAILORT_EXPORT_DIR}
+  install -m 0644 ${UNPACKDIR}/build/hailort/libhailort/src/*.cmake ${HAILORT_EXPORT_DIR}
+  install -m 0644 ${UNPACKDIR}/build/hailort/libhailort/src/CMakeFiles/Export/**/*.cmake ${HAILORT_EXPORT_DIR}
 }
 
 FILES:${PN} += "${libdir}/libhailort.so.${PV}"

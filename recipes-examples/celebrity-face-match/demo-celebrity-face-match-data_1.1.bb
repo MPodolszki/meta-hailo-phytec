@@ -26,7 +26,7 @@ INSTALL_DIR := "${D}${datadir}/${DEMO_PN}"
 do_install() {
     echo ${INSTALL_DIR}
     install -d ${INSTALL_DIR}
-    tar --no-same-owner -xzpf ${WORKDIR}/${PN}-${PV}.tar.gz -C ${INSTALL_DIR}
+    tar --no-same-owner -xzpf ${UNPACKDIR}/${PN}-${PV}.tar.gz -C ${INSTALL_DIR}
     find ${INSTALL_DIR} -type d -exec chmod 755 {} +
     find ${INSTALL_DIR} -type f -exec chmod 644 {} +
 }
