@@ -24,7 +24,10 @@ def hailo_chip_packages(d):
     chip = d.getVar('HAILO_CHIP')
     if chip == "hailo8":
         # HailoRT 'hailo8' branch/4.23.0 - the last HailoRT line that still supports Hailo-8.
-        packages = "hailo8-firmware hailo8-pci libhailort hailortcli libgsthailo hailo8-python-wheels"
+        # pyhailort (not hailo8-python-wheels): the prebuilt wheel's cp312 extension module
+        # cannot be imported by this BSP's Python 3.13, so the binding is built from source
+        # against the target interpreter instead. See pyhailort_4.23.0.bb.
+        packages = "hailo8-firmware hailo8-pci libhailort hailortcli libgsthailo pyhailort"
         # Whisper speech recognition benchmark, i.MX8MP CPU vs Hailo-8 (backend_hailo.py's HEFs
         # are compiled specifically for Hailo-8). Pulls in ~280 MB of models via
         # demo-whisper-benchmark-data, plus ~230 MB of cached NPU graph binaries under /var/cache
