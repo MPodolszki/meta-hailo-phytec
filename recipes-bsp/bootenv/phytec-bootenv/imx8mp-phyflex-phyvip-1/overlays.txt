@@ -1,0 +1,15 @@
+# Overrides meta-phytec's overlays.txt for this machine (the bbappend puts this
+# directory first in FILESEXTRAPATHS). Same PEB-B-006 display overlay as there
+# -- multiple overlays are separated by "#", as in the other machines here --
+# plus the camera on CSI1, without which demo-celebrity-face-match dies in
+# setup-pipeline-csi1 with "No camera found on CSI1" and demo-loop's camera
+# demos are in the same position.
+#
+# The camera fitted here is a VM-116, but the overlay is the vm016 one: this
+# BSP ships overlays for VM-016/VM-017/VM-020 only, and the VM-116 presents
+# the same AR0144 straight on CSI1, which is what that overlay describes.
+# Verified on the board: ar0144 probes at i2c 3-0010 with no deserializer on
+# the bus, and the media graph is ar0144 -> mxc-mipi-csi2.0 -> mxc_isi.0.
+# A camera behind the baseboard's FPD-Link deserializer would want the
+# -fpdlink-port0/-port1 variant instead.
+fit_overlay_conf=conf-imx8mp-phyflex-phyvip-peb-b-006.dtbo#conf-imx8mp-phyflex-vm016-csi1.dtbo
