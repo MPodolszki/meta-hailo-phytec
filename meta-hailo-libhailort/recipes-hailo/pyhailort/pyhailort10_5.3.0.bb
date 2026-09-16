@@ -26,8 +26,9 @@ do_compile:prepend() {
     export HailoRT_DIR=${STAGING_LIBDIR}/cmake/HailoRT
     # allow linkage against pybind11
     export PYTHON_INCLUDE_DIRS=${STAGING_INCDIR}/python${PYTHON_BASEVERSION}
-    # define the toolchain file
-    export CMAKE_TOOLCHAIN_FILE=${UNPACKDIR}/toolchain.cmake
+    # define the toolchain file -- cmake.bbclass generates it in WORKDIR, and
+    # since scarthgap UNPACKDIR is a separate directory (WORKDIR/sources-unpack)
+    export CMAKE_TOOLCHAIN_FILE=${WORKDIR}/toolchain.cmake
 }
 
 # prevents the following error:
