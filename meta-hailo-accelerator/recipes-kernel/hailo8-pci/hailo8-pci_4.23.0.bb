@@ -5,7 +5,7 @@ DESCRIPTION = "hailo pcie driver for hailo8 \
                Hailo-10H/15/Mars) - the two use different module names, driver names \
                ('hailo' vs 'hailo1x') and PCI device IDs, so both can be loaded at the same time."
 
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://../../LICENSE;md5=39bba7d2cf0ba1036f2a6e2be52fe3f0"
 
 SRC_URI = "git://git@github.com/hailo-ai/hailort-drivers.git;protocol=https;branch=hailo8"

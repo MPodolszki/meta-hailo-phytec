@@ -2,7 +2,7 @@ DESCRIPTION = "tappas-tracers GStreamer plugin \
                compiles the tappas libgsttracer gstreamer plugin \ 
                and copies it to usr/lib/gstreamer-1.0 (gstreamer's plugins directory) "
                
-LICENSE = "LGPLv2.1"
+LICENSE = "LGPL-2.1-only"
 LIC_FILES_CHKSUM += "file://../../LICENSE;md5=4fbd65380cdd255951079008b364516c"
 
 SRC_URI = "git://git@github.com/hailo-ai/tappas.git;protocol=https;branch=master"

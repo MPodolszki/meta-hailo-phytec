@@ -2,7 +2,7 @@ DESCRIPTION = "Tappas post processes \
                compiles the hailo post processes, including draw processes, cropping algorithms and various network postprocesses \
                and copies it to usr/lib/hailo-post-processes"
 
-LICENSE = "LGPLv2.1"
+LICENSE = "LGPL-2.1-only"
 LIC_FILES_CHKSUM += "file://../../LICENSE;md5=4fbd65380cdd255951079008b364516c"
 
 SRC_URI = "git://git@github.com/hailo-ai/tappas.git;protocol=https;branch=master"

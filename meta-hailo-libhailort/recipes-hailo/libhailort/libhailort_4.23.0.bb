@@ -30,8 +30,9 @@ do_install:append() {
   cp -r ${S}/hailort/libhailort/include/* ${HAILORT_INCLUDE_STAGING_DIR}/
 
   install -d ${HAILORT_EXPORT_DIR}
-  install -m 0644 ${UNPACKDIR}/build/hailort/libhailort/src/*.cmake ${HAILORT_EXPORT_DIR}
-  install -m 0644 ${UNPACKDIR}/build/hailort/libhailort/src/CMakeFiles/Export/**/*.cmake ${HAILORT_EXPORT_DIR}
+  # Only the exported config files - cmake_install.cmake carries build paths (buildpaths QA)
+  install -m 0644 ${B}/hailort/libhailort/src/HailoRTConfig.cmake ${B}/hailort/libhailort/src/HailoRTConfigVersion.cmake ${HAILORT_EXPORT_DIR}
+  install -m 0644 ${B}/hailort/libhailort/src/CMakeFiles/Export/**/*.cmake ${HAILORT_EXPORT_DIR}
 }
 
 FILES:${PN} += "${libdir}/libhailort.so.${PV}"
