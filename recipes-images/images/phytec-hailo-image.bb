@@ -1,6 +1,6 @@
 require recipes-images/images/phytec-vision-image.bb
 
-SUMMARY =  "PHYTEC's AiKit Hailo Demo image"
+SUMMARY = "PHYTEC's AiKit Hailo image: the complete accelerator stack, no demos"
 LICENSE = "MIT"
 
 # Which Hailo accelerator chip this image is built for: "hailo8" (Hailo-8/8L/8R) or "hailo10"
@@ -28,19 +28,6 @@ def hailo_chip_packages(d):
         # cannot be imported by this BSP's Python 3.13, so the binding is built from source
         # against the target interpreter instead. See pyhailort_4.23.0.bb.
         packages = "hailo8-firmware hailo8-pci libhailort hailortcli libgsthailo pyhailort"
-        # Whisper speech recognition benchmark, i.MX8MP CPU vs Hailo-8 (backend_hailo.py's HEFs
-        # are compiled specifically for Hailo-8). Pulls in ~280 MB of models via
-        # demo-whisper-benchmark-data, plus ~230 MB of cached NPU graph binaries under /var/cache
-        # at first run.
-        packages += " demo-whisper-benchmark"
-        # YOLOv8n object detection (image + live camera), HailoRT on-chip NMS, also
-        # compiled specifically for Hailo-8. Pulls in ~5 MB of models via
-        # demo-object-detection-data.
-        packages += " demo-object-detection"
-        # Unattended kiosk rotation through the three demos above plus a
-        # static "other demos" info screen; takes over from
-        # demo-celebrity-face-match's own always-on service (disables it).
-        packages += " demo-loop"
     elif chip == "hailo10":
         # HailoRT master branch/5.3.0 - Hailo-10H/15/Mars.
         packages = "hailo-firmware hailo-pci libhailort10 hailort10cli libgsthailo10 hailo-python-wheels"
@@ -48,13 +35,14 @@ def hailo_chip_packages(d):
         bb.fatal("HAILO_CHIP must be 'hailo8' or 'hailo10', got '%s'" % chip)
     return packages
 
+# The complete Hailo stack and nothing that only a demo needs: this image has to
+# stand on its own without meta-hailo-examples-phytec. The demos, the kiosk loop
+# and what they pull in are added on top by phytec-hailo-demo-image over there.
 IMAGE_INSTALL += "\
     packagegroup-imx-ml \
     python3-pip \
     git \
     python3-netifaces \
-    demo-celebrity-face-match \
-    canon-selphy \
 "
 
 #adding Hailo Packages to the Phytecs AI Image
