@@ -1,8 +1,14 @@
 # meta-hailo-phytec
 
 PHYTEC's Yocto layer for the **PHYTEC Hailo AI Kit**: a phyBOARD-Pollux
-(i.MX8MP) carrying a Hailo-8 M.2 AI accelerator, running an unattended demo
-kiosk out of the box.
+(i.MX8MP) carrying a Hailo-8 M.2 AI accelerator.
+
+This layer is the complete accelerator support -- firmware, PCIe driver,
+HailoRT, `hailortcli`, GStreamer elements and the Python bindings and wheels
+-- and gives a fully working Hailo system **on its own**. The demos and the
+unattended demo kiosk live in
+[meta-hailo-examples-phytec](https://github.com/MPodolszki/meta-hailo-examples-phytec),
+which builds on this layer; nothing here depends on it.
 
 This layer is a fork of [hailo-ai/meta-hailo](https://github.com/hailo-ai/meta-hailo).
 Hailo's own layer description — HailoRT, drivers, firmware, TAPPAS, links to
@@ -67,8 +73,13 @@ repo sync
 ```sh
 ./tools/init
 . sources/poky/oe-init-build-env
-bitbake phytec-hailo-image
+bitbake phytec-hailo-image         # Hailo stack only, this layer
+bitbake phytec-hailo-demo-image    # stack + demos + kiosk, needs meta-hailo-examples-phytec
 ```
+
+`phytec-hailo-demo-image` is `phytec-hailo-image` plus the demos, so both
+share the `HAILO_CHIP` setting below. The file names under
+[Flashing](#flashing) follow whichever image you built.
 
 `./tools/init` runs once per checkout. It generates `build/conf/bblayers.conf`
 from the manifest and writes `MACHINE` and `DISTRO` into `build/conf/local.conf`
@@ -120,6 +131,10 @@ internal eMMC; boot source selection on phyBOARD-Pollux is a hardware setting.
 ---
 
 ## What the board does after boot
+
+`phytec-hailo-image` boots into the plain PHYTEC vision image with the
+accelerator ready (`hailortcli fw-control identify`) and starts no demo. The
+rest of this section applies to **`phytec-hailo-demo-image`**.
 
 `demo-loop.service` is the only demo that autostarts. It rotates four slots,
 30 seconds each, forever, on whichever display was detected:
@@ -183,7 +198,7 @@ accelerator stack goes into the image. Exactly one is ever installed:
 
 | Value | Stack |
 |---|---|
-| `hailo8` (default, **the shipped kit**) | HailoRT 4.23.0 `hailo8` branch — the last line that still supports Hailo-8 — plus firmware, PCIe driver, `hailortcli`, `libhailort`, `libgsthailo`, Python wheels, and the three demos |
+| `hailo8` (default, **the shipped kit**) | HailoRT 4.23.0 `hailo8` branch — the last line that still supports Hailo-8 — plus firmware, PCIe driver, `hailortcli`, `libhailort`, `libgsthailo`, Python bindings and wheels; `phytec-hailo-demo-image` adds the three demos |
 | `hailo10` | HailoRT 5.3.0 master — Hailo-10H/15/Mars. **Untested for this kit.** |
 
 They cannot coexist: HailoRT's master branch dropped Hailo-8 support entirely,
@@ -216,13 +231,16 @@ Hailo-15 territory and stay out of the Hailo-8 kit.
 `LAYERDEPENDS` are `core phytec ampliphy imx-machine-learning`;
 `LAYERSERIES_COMPAT` is `scarthgap`.
 
-The demo kiosk itself lives in a separate layer,
-[meta-hailo-examples-phytec](https://github.com/MPodolszki/meta-hailo-examples-phytec).
+The demos, the demo kiosk, the Canon SELPHY printer setup and
+`phytec-hailo-demo-image` live in a separate layer,
+[meta-hailo-examples-phytec](https://github.com/MPodolszki/meta-hailo-examples-phytec),
+whose `LAYERDEPENDS` include this one. The dependency only points that way:
+leave that layer out and `phytec-hailo-image` still builds.
 
 ### Note on `meta-celebrity-face-match`
 
-This layer carries its own `demo-celebrity-face-match_0.5.bb` and
-`demo-celebrity-face-match-data_1.1.bb`. PHYTEC's standalone
+meta-hailo-examples-phytec carries its own `demo-celebrity-face-match_0.5.bb`
+and `demo-celebrity-face-match-data_1.1.bb`. PHYTEC's standalone
 `meta-celebrity-face-match` layer ships recipes of the **same name and
 version**, so the two layers must not both be active. The kit manifest
 therefore does not include it.
