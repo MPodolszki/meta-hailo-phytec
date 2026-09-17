@@ -1,0 +1,38 @@
+From 54350c4ddbb25780c813a2bf30a2e6bd086d63c5 Mon Sep 17 00:00:00 2001
+From: Garfield Watkins <garfield.watkins@gmail.com>
+Date: Wed, 8 Apr 2026 20:57:13 +0200
+Subject: [PATCH] Surround call to find_vma with mmap_read_lock and
+ mmap_read_unlock as is required otherwise the kernel logs get flooded with
+ warnings related to this.
+
+find_vma() asserts that mmap_lock is held (include/linux/rwsem.h:80). Without
+it every HAILO_VDMA_BUFFER_MAP ioctl leaves a WARNING with a full backtrace in
+dmesg -- on the phyVIP facematch demo that is one per vstream buffer on every
+start of the demo.
+
+Taken verbatim from hailo-ai/hailort-drivers commit 54350c4, which is not in
+the hailo8 branch as of v4.24.0. Drop this patch once the SRCREV moves past it.
+
+Upstream-Status: Backport [https://github.com/hailo-ai/hailort-drivers commit 54350c4]
+Signed-off-by: Manuel Podolszki <m.podolszki@phytec.de>
+---
+ linux/vdma/memory.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/linux/vdma/memory.c b/linux/vdma/memory.c
+index 7ad4a68..7a78cc5 100644
+--- a/linux/vdma/memory.c
++++ b/linux/vdma/memory.c
+@@ -167,7 +167,9 @@ struct hailo_vdma_buffer *hailo_vdma_buffer_map(struct device *dev,
+     }
+ 
+     if (HAILO_DMA_DMABUF_BUFFER != buffer_type) {
++        mmap_read_lock(current->mm);
+         vma = find_vma(current->mm, addr_or_fd);
++        mmap_read_unlock(current->mm);
+         if (IS_ENABLED(HAILO_SUPPORT_MMIO_DMA_MAPPING)) {
+             if (NULL == vma) {
+                 dev_err(dev, "no vma for virt_addr/size = 0x%08lx/0x%08zx\n", addr_or_fd, size);
+-- 
+2.43.0
+
