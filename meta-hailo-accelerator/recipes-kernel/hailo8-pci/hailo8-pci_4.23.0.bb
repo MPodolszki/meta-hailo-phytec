@@ -11,6 +11,9 @@ LIC_FILES_CHKSUM = "file://../../LICENSE;md5=39bba7d2cf0ba1036f2a6e2be52fe3f0"
 SRC_URI = "git://git@github.com/hailo-ai/hailort-drivers.git;protocol=https;branch=hailo8"
 SRCREV = "ce1087bfe8132c99b41374e3128fc78612a3f492"
 
+# The patch touches linux/vdma/, above S -- apply it at the root of the clone.
+SRC_URI += "file://0001-vdma-take-mmap_read_lock-around-find_vma.patch;patchdir=${UNPACKDIR}/git"
+
 inherit module
 
 S = "${UNPACKDIR}/git/linux/pcie"
