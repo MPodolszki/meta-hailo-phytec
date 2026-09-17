@@ -1,0 +1,5 @@
+# /dev/hailo* comes up root:root 0600, which only root can open. Everything
+# that talks to the accelerator -- the demos included -- runs as an ordinary
+# user, so hand the node to the video group the way the other media devices
+# on this board are handled.
+KERNEL=="hailo*", GROUP="video", MODE="0660"

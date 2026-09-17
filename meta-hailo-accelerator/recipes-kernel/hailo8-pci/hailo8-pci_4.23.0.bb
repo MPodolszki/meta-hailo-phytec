@@ -14,6 +14,14 @@ SRCREV = "ce1087bfe8132c99b41374e3128fc78612a3f492"
 # The patch touches linux/vdma/, above S -- apply it at the root of the clone.
 SRC_URI += "file://0001-vdma-take-mmap_read_lock-around-find_vma.patch;patchdir=${WORKDIR}/git"
 
+# The udev rule belongs with the driver that creates the node, not with
+# whichever application happens to need it: without it /dev/hailo0 stays
+# root:root 0600 and every non-root user of the accelerator fails with
+# HAILO_DRIVER_OPERATION_FAILED. It used to ship with demo-loop, which meant
+# any image without the kiosk rotation -- phytec-hailo-facematch-image, for
+# one -- had a Hailo-8 nobody could open.
+SRC_URI += "file://99-hailo.rules"
+
 inherit module
 
 S = "${WORKDIR}/git/linux/pcie"
@@ -21,3 +29,10 @@ S = "${WORKDIR}/git/linux/pcie"
 EXTRA_OEMAKE += "KERNEL_DIR=${STAGING_KERNEL_DIR}"
 MAKE_TARGETS = "all"
 MODULES_INSTALL_TARGET = "install"
+
+do_install:append() {
+    install -Dm 0644 ${WORKDIR}/99-hailo.rules \
+        ${D}${sysconfdir}/udev/rules.d/99-hailo.rules
+}
+
+FILES:${PN} += "${sysconfdir}/udev/rules.d/99-hailo.rules"
