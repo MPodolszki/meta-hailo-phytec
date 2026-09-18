@@ -30,7 +30,7 @@ RDEPENDS:${PN} += " \
     python3-numpy \
 "
 
-RCONFLICTS:${PN} += "pyhailort hailo8-python-wheels"
+RCONFLICTS:${PN} += "pyhailort10 hailo8-python-wheels"
 
 INSANE_SKIP:${PN} += "already-stripped"
 

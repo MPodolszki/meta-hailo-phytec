@@ -30,7 +30,11 @@ RDEPENDS:${PN} += " \
     python3-numpy \
 "
 
-RCONFLICTS:${PN} += "pyhailort hailo-python-wheels"
+# The demos in meta-hailo-examples-phytec depend on pyhailort, which on walnascar is
+# the Hailo-8 binding built from source (Python 3.13 cannot load this cp312 wheel).
+# Python here is 3.12, so the wheel is that binding, and it answers to the same name.
+RPROVIDES:${PN} += "pyhailort"
+RCONFLICTS:${PN} += "pyhailort10 hailo-python-wheels"
 
 INSANE_SKIP:${PN} += "already-stripped"
 
